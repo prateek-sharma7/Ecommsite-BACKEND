@@ -89,7 +89,7 @@ class User {
             name: this.name,
           },
         };
-        return db.collection("orders").insertOne(this.cart);
+        return db.collection("orders").insertOne(order);
       })
       .then((result) => {
         this.cart = { items: [] };
@@ -102,7 +102,13 @@ class User {
       });
   }
 
-  getOrders() {}
+  getOrders() {
+    const db = getDb();
+    return db
+      .collection("orders")
+      .find({ "user._id": new ObjectId(this._id) })
+      .toArray();
+  }
 
   static findById(userId) {
     const db = getDb();
